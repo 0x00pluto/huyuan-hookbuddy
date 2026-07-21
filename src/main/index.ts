@@ -1,9 +1,31 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, nativeTheme } from 'electron'
 import { exec } from 'child_process'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initUpdater } from './updater'
+
+/** 与渲染层 TitleBar `h-11`（44px）对齐 */
+const TITLE_BAR_HEIGHT = 44
+
+function getWindowsTitleBarOverlay(): {
+  color: string
+  symbolColor: string
+  height: number
+} {
+  // 与 main.css 的 --background / --foreground 明暗色对齐
+  const isDark = nativeTheme.shouldUseDarkColors
+  return {
+    color: isDark ? '#252525' : '#ffffff',
+    symbolColor: isDark ? '#fafafa' : '#252525',
+    height: TITLE_BAR_HEIGHT
+  }
+}
+
+function syncWindowsTitleBarOverlay(window: BrowserWindow): void {
+  if (process.platform !== 'win32' || window.isDestroyed()) return
+  window.setTitleBarOverlay(getWindowsTitleBarOverlay())
+}
 
 function createWindow(): void {
   // Create the browser window.
@@ -20,12 +42,28 @@ function createWindow(): void {
           trafficLightPosition: { x: 14, y: 14 }
         }
       : {}),
+    ...(process.platform === 'win32'
+      ? {
+          titleBarStyle: 'hidden' as const,
+          titleBarOverlay: getWindowsTitleBarOverlay()
+        }
+      : {}),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
+
+  if (process.platform === 'win32') {
+    const onThemeUpdated = (): void => {
+      syncWindowsTitleBarOverlay(mainWindow)
+    }
+    nativeTheme.on('updated', onThemeUpdated)
+    mainWindow.on('closed', () => {
+      nativeTheme.off('updated', onThemeUpdated)
+    })
+  }
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

@@ -38,7 +38,7 @@ function getAriaLabel(isMac: boolean): string {
   return isMac ? '下载新版本' : '重启并安装更新'
 }
 
-export function UpdateEntry({ updateStatus, variant }: UpdateEntryProps): React.JSX.Element | null {
+export function UpdateEntry({ updateStatus }: UpdateEntryProps): React.JSX.Element | null {
   const [open, setOpen] = useState(false)
   const [hasRunningTask, setHasRunningTask] = useState(false)
   const isMac = getPlatform() === 'darwin'
@@ -83,15 +83,18 @@ export function UpdateEntry({ updateStatus, variant }: UpdateEntryProps): React.
           <Button
             type="button"
             variant="ghost"
-            size={variant === 'sidebar' ? 'icon-sm' : 'icon-sm'}
+            size="icon-sm"
             className={cn(
-              'text-emerald-600 hover:bg-emerald-500/10 hover:text-emerald-700 dark:text-emerald-400',
-              variant === 'sidebar' && 'size-7 rounded-full'
+              'group/update h-7 min-w-7 gap-0 rounded-full border-0 bg-emerald-500/15 px-1.5',
+              'text-emerald-600 transition-all duration-200',
+              'hover:bg-emerald-600 hover:px-2.5 hover:text-white',
+              'dark:bg-emerald-400/15 dark:text-emerald-400 dark:hover:bg-emerald-500 dark:hover:text-white'
             )}
             aria-label={getAriaLabel(isMac)}
             onClick={() => setOpen(true)}
           >
-            <ArrowUp className="size-4" />
+            <ArrowUp className="size-4 shrink-0 group-hover/update:hidden" />
+            <span className="hidden text-xs font-medium group-hover/update:inline">升级</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent>{getTooltipText(updateStatus, isMac)}</TooltipContent>

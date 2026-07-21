@@ -19,7 +19,9 @@ export function TitleBar({
   onToggleSidebar,
   updateStatus
 }: TitleBarProps): React.JSX.Element {
-  const isMac = window.electron?.process?.platform === 'darwin'
+  const platform = window.electron?.process?.platform
+  const isMac = platform === 'darwin'
+  const isWindows = platform === 'win32'
 
   return (
     <header
@@ -83,6 +85,9 @@ export function TitleBar({
           <LayoutPanelLeft />
         </Button>
       </div>
+
+      {/* Windows 原生窗口按钮覆盖区占位，避免业务按钮被遮挡 */}
+      {isWindows && <div className="w-[138px] shrink-0" aria-hidden />}
     </header>
   )
 }
