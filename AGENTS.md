@@ -6,7 +6,7 @@
 
 HookBuddy —— 基于 Electron 的 AI 桌面客户端（Codex 风格），支持 Windows / macOS 双端分发。选型与架构依据 [docs/MAC Windows 选型技术文档.md](docs/MAC%20Windows%20选型技术文档.md)。
 
-团队角色命令（产品经理 / 工程验收官 / 测试工程师）见 [`.cursor/commands/team/`](.cursor/commands/team/)；文档地图见 [docs/doc_index.md](docs/doc_index.md)。
+团队角色命令（产品经理 / 工程验收官 / 需求探索专家 / 前端工程师 / 测试工程师）见 [`.cursor/commands/team/`](.cursor/commands/team/)；文档地图见 [docs/doc_index.md](docs/doc_index.md)。
 
 ## 技术栈
 

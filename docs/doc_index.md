@@ -10,3 +10,5 @@
 - docs/faqs/how-to-fix-electron-window-not-showing-run-as-node.md: 清除 ELECTRON_RUN_AS_NODE 后窗口才能正常弹出。
 - docs/faqs/how-to-fix-shadcn-framework-detection-in-electron-vite.md: 用根目录 vite.config.ts 幌子让 shadcn CLI 通过框架检测。
 - specs/prds/prd-wiki-index.md: PRD 索引表；尚无条目，由 /team:product-manager 创建后追加。
+- specs/features/: Feature Spec 目录；由 /team:po-explorer 落盘 `feat-{五位序号}-{feature-slug}.md`。
+- .cursor/commands/team/: 团队角色命令（含 /team:po-explorer、/team:front-engineer 等）。
