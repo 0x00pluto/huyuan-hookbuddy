@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+out/
+release/
+artifacts/
+
+# Build and test caches
+.vite/
+.cache/
+coverage/
+*.tsbuildinfo
+.eslintcache
+
+# Logs
+logs/
+*.log
+*.log.*
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+*.local
+
+# IDEs and editors
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Signing credentials and certificates
+*.p12
+*.pfx
+*.cer
+*.key
+
+.vscode/
+.cursor/
