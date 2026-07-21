@@ -4,7 +4,9 @@
 
 - AGENTS.md: HookBuddy Agent 协作规范：技术栈、三层 IPC 安全边界、常用命令与已知坑。
 - README.md: 项目安装、开发（pnpm dev）与 Windows/macOS/Linux 构建入口说明。
+- CHANGELOG.md: 版本变更记录（Keep a Changelog + 语义化版本）。
 - docs/MAC Windows 选型技术文档.md: Electron + React 双端 AI 桌面客户端选型与三层进程架构指南。
+- docs/build-and-release.md: 本地打包命令、CI 触发（v* 标签 / 手动）与发布流程说明。
 - docs/faqs/how-to-configure-electron-mirror-for-pnpm-in-china.md: 国内网络下为 pnpm 配置 Electron 镜像，避免二进制下载失败。
 - docs/faqs/how-to-fix-electron-uninstall-extract-zip-silent-failure.md: Node 26 下 extract-zip 静默失败导致 Electron uninstall 的手动解压修复。
 - docs/faqs/how-to-fix-electron-window-not-showing-run-as-node.md: 清除 ELECTRON_RUN_AS_NODE 后窗口才能正常弹出。
