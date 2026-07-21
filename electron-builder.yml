@@ -9,6 +9,16 @@ files:
   - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  # Tailwind / Vite 仅构建期使用，打进 asar 会导致 mac universal 合并原生 .node 失败
+  - '!node_modules/tailwindcss{,/**}'
+  - '!node_modules/@tailwindcss{,/**}'
+  - '!node_modules/tw-animate-css{,/**}'
+  - '!node_modules/lightningcss{,/**}'
+  - '!node_modules/lightningcss-*/**'
+  - '!node_modules/shadcn{,/**}'
+  - '!node_modules/vite{,/**}'
+  - '!node_modules/@vitejs{,/**}'
+  - '!node_modules/electron-vite{,/**}'
 asarUnpack:
   - resources/**
 win:
@@ -19,12 +29,13 @@ nsis:
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
+  identity: null
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+    NSCameraUsageDescription: Application requests access to the device's camera.
+    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
 dmg:
   artifactName: ${name}-${version}.${ext}

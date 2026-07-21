@@ -64,7 +64,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build macOS Universal
-        run: pnpm exec electron-vite build && pnpm exec electron-builder --mac --universal --publish never
+        run: pnpm exec electron-vite build && pnpm exec electron-builder --mac dmg zip --universal --publish never
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
@@ -72,8 +72,9 @@ jobs:
           name: hookbuddy-macos-universal
           path: |
             dist/*.dmg
+            dist/*-mac.zip
             dist/*.zip
-            dist/*.yml
+            dist/latest-mac.yml
             dist/*.blockmap
           if-no-files-found: error
           retention-days: 14
