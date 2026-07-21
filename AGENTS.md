@@ -36,6 +36,13 @@ Renderer (src/renderer) --window.electronAPI--> Preload (src/preload) --IPC--> M
 - 全局样式与主题变量：`src/renderer/src/assets/main.css`
 - 路径别名：`@/*` → `src/renderer/src/*`（`electron.vite.config.ts` 与 `tsconfig.web.json` 中已配置，保持两处一致）
 
+## 代码索引（Codebase MCP）
+
+本仓库已用 Codebase MCP 建立知识图谱索引，项目名为 `Users-peng.zhi-Documents-Object-WeDAO-huyuan-hookbuddy`（作为各工具的 `project` 参数）。
+
+- **查代码优先用图谱**：找定义、调用关系、影响面时，用 `search_graph` / `search_code` / `trace_path` / `get_architecture`，替代 grep 盲搜。
+- **改动大或跨会话后需重建索引**：`index_repository`（`repo_path` 指向仓库根，`mode=full`），保持图谱与代码同步。
+
 ## 常用命令
 
 ```bash

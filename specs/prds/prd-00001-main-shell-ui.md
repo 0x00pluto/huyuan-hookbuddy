@@ -2,15 +2,19 @@
 name: prd-00001-main-shell-ui
 sequence: 1
 description: HookBuddy 主功能界面 Shell：对标 Codex 的左右分栏布局、空状态快捷卡片与底部聊天输入框（静态排版 + mock）。
-status: backlog
+status: accepted
 created: 2026-07-21T06:22:19Z
+last_accepted_at: 2026-07-21T06:58:28Z
+accepted_commit: 6241752
+accepted_branch: dev
+accepted_scope: R0,R1
 ---
 
 # PRD: HookBuddy 主界面 Shell
 
 | 属性 | 值 |
 |------|-----|
-| 状态 | backlog |
+| 状态 | 工程：accepted（见文末「工程验收状态」） |
 | 范围 | Renderer 主 Shell UI（排版与交互骨架）；不含 Agent 执行与真实项目接入 |
 | 关联文档 | `AGENTS.md`、`docs/MAC Windows 选型技术文档.md`、`docs/doc_index.md` |
 | 参考视觉 | [assets/codex-main-shell-reference.png](assets/codex-main-shell-reference.png)（Codex 桌面端主界面） |
@@ -356,3 +360,75 @@ stateDiagram-v2
 |------|------|
 | 2026-07-21 | 初稿创建：基于 Codex 主界面截图与已拍板决策落盘 |
 | 2026-07-21 | 将参考截图入库 `specs/prds/assets/codex-main-shell-reference.png` 并嵌入 PRD |
+
+## 14. 工程验收状态
+
+> 由 `/team:prd-accept` 维护；勿手工编造「通过」。最后更新：2026-07-21T06:58:28Z，dev@6241752，范围：R0,R1。
+
+### 总览
+
+| 项 | 值 |
+|----|-----|
+| 工程状态 | accepted |
+| 验收判定 | Release 0 交付完整；Release 1 按 PRD「可选」标范围外 |
+| 最近验收 | 2026-07-21T06:58:28Z（对照代码 + Renderer UI 端到端取证） |
+| 代码提交 | `6241752` @ `dev` |
+
+摘要：
+
+- Main Shell 已替换脚手架 Hello World，组件落在 `src/renderer/src/components/shell/`。
+- R0 闭环可走通：选项目 → 快捷卡片填入 → 发送对话 →「新建任务」回空状态 → 折叠侧栏。
+- macOS `hiddenInset` 与 `ThemeProvider`（跟随系统）已落地；R1 搜索/真实选目录/Windows 标题栏未做。
+- `pnpm typecheck` 通过；shell 相关 ESLint 通过（全仓 `pnpm lint` 仍受既有 shadcn 生成物规则影响）。
+- O1–O5 开放项不纳入验收；实现上 O1/O2/O3 已按拍板落地（品牌 HookBuddy、侧栏「新建任务」清空会话、中文 mock 名）。
+
+### Release 交付
+
+| Release | 状态 | 说明 |
+|---------|------|------|
+| R0 | 通过 | MVP 主 Shell UI + mock 交互已交付并可演示 |
+| R1 | 范围外 | PRD 标明「可选」；本期未交付搜索过滤 / dialog 选目录 / Windows 标题栏增强 |
+
+### 功能验收清单（Agent 优先读此表）
+
+| ID | 能力摘要 | Release | 状态 | 证据 |
+|----|----------|---------|------|------|
+| R0-01 | 左右分栏 Main Shell（侧栏 + 主区 + Composer） | R0 | 通过 | `src/renderer/src/components/shell/MainShell.tsx`；`App.tsx` 挂载；UI 首屏无 Hello World |
+| R0-02 | 可折叠侧栏；标题栏折叠/展开入口 | R0 | 通过 | `TitleBar.tsx`（`PanelLeft`/`PanelLeftClose`）；`MainShell` `sidebarOpen`；UI：折叠后侧栏消失、按钮变「展开侧栏」 |
+| R0-03 | 侧栏品牌 / 搜索图标 / 四导航 / 设置 | R0 | 通过 | `Sidebar.tsx`（HookBuddy、Search、SquarePen/Clock/Puzzle/GitPullRequest、Settings）；占位 toast「功能开发中」 |
+| R0-04 | 项目 mock：展开/截断 5 条/显示更多/高亮 | R0 | 通过 | `mock-projects.ts`（≥2 项目；杂七杂八 7 任务）；`ProjectList.tsx` `DEFAULT_VISIBLE_TASKS`；UI：显示更多后出现额外子项 |
+| R0-05 | 任务分组占位 | R0 | 通过 | `Sidebar.tsx` + `MOCK_STANDALONE_TASKS` |
+| R0-06 | 空状态标题随项目名 + 4 快捷卡片 | R0 | 通过 | `EmptyState.tsx` + `QUICK_ACTIONS`；UI：标题随选中项目变化 |
+| R0-07 | 快捷卡片填入 Composer、不自动发送 | R0 | 通过 | `MainShell` `onQuickAction`→`setDraft`；UI：输入框有文案且仍空状态 |
+| R0-08 | Composer 工具栏占位 + 多行输入 + 空内容禁用发送 | R0 | 通过 | `Composer.tsx`（+/审批/模型下拉、Enter 发送、Shift+Enter 换行）；UI：空时发送 disabled |
+| R0-09 | 对话视图：用户回显 + AI 占位；多轮追加 | R0 | 通过 | `ChatView.tsx`；`AI_PLACEHOLDER_REPLY`；UI：发送后双气泡 |
+| R0-10 | 返回空状态（侧栏「新建任务」） | R0 | 通过 | `MainShell.resetToEmpty`（O2 固定侧栏入口） |
+| R0-11 | 中文文案 + lucide | R0 | 通过 | 各 shell 组件文案与 lucide 图标 |
+| R0-12 | 浅/深色跟随系统 | R0 | 通过 | `App.tsx` `ThemeProvider` `defaultTheme="system"`；`main.css` sidebar/background 变量；UI 当前 `html.dark` |
+| R0-13 | macOS 无边框标题栏（hiddenInset） | R0 | 通过 | `src/main/index.ts` `titleBarStyle: 'hiddenInset'` + `trafficLightPosition`（桌面窗建议人工再瞄一眼错位） |
+| R0-14 | R0 无新增业务 IPC | R0 | 通过 | Preload 仍仅 `runSkill`；本期无 dialog IPC |
+| R1-01 | 侧栏搜索过滤 mock | R1 | 范围外 | PRD 可选；未实现真实过滤（搜索仅 toast） |
+| R1-02 | 真实打开文件夹选项目（Preload dialog） | R1 | 范围外 | PRD 可选；未新增 dialog IPC |
+| R1-03 | Windows 标题栏/拖拽区增强 | R1 | 范围外 | PRD 可选 / O4；R0 仅 darwin hiddenInset |
+
+### 未完成与遗留
+
+- R1 三项（搜索过滤、真实选目录、Windows 标题栏）待另排期，不阻塞 R0 验收。
+- 全仓 `pnpm lint`：既有 `components/ui/*` shadcn 生成物存在 `explicit-function-return-type` 等历史问题；R0 shell 源码 ESLint 通过。
+- 系统外观浅↔深切换的对比度：代码已接 system theme；自动化未改 OS 外观，建议人工快速确认浅色模式。
+- Electron 交通灯与折叠按钮间距：建议在真实桌面窗确认一次（浏览器只验 Renderer）。
+
+### 质量检查
+
+| 检查项 | 状态 |
+|--------|------|
+| 自动化测试（本项目无） | 跳过 |
+| Renderer UI 端到端取证 | 通过（`localhost:5173`，主路径闭环） |
+| pnpm typecheck | 通过 |
+| pnpm lint（shell 相关） | 通过 |
+| pnpm lint（全仓） | 部分（既有 ui 生成物，非本期引入） |
+| 文档与 OpenAPI 同步 | 不适用（无 REST OpenAPI；R0 无 IPC 变更） |
+| Preload / IPC 边界 | 通过（无新增暴露） |
+
+---
+统计：通过 14 / 部分 0 / 未实现 0 / 范围外 3
