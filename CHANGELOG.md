@@ -8,6 +8,21 @@
 
 ## [未发布]
 
+## [1.1.0] - 2026-07-21
+
+### Added
+
+- Windows 沉浸式标题栏：`titleBarStyle: hidden` + `titleBarOverlay`，消除系统标题栏与自定义顶栏叠加的「双层壳」；原生最小化/最大化/关闭按钮嵌入 44px 自定义标题栏，并随系统明暗主题实时同步配色。
+
+### Changed
+
+- 标题栏更新入口改为药丸样式，悬停展开「升级」文案。
+- ESLint 豁免 shadcn 生成物（`components/ui`）的返回类型与 react-refresh 限制，并统一代码风格为单引号；`cn()` 补显式返回类型。
+
+### Removed
+
+- 移除 `tsconfig.web.json` 中已弃用的 `baseUrl`（TypeScript 7.0 将移除），`paths` 改为显式相对路径。
+
 ## [1.0.5] - 2026-07-21
 
 ### Changed
@@ -40,7 +55,8 @@
 
 - 构建 macOS universal 包时排除构建期 Tailwind 原生依赖，避免合并失败。
 
-[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.5...HEAD
+[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.5...v1.1.0
 [1.0.5]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.3...v1.0.4
 [1.0.0]: https://github.com/0x00pluto/huyuan-hookbuddy/releases/tag/v1.0.0
