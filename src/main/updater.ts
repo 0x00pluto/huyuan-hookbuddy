@@ -57,15 +57,24 @@ function resetErrorState(): void {
   }
 }
 
+function resolveMacDmgUrl(version: string, fileUrl: string): string {
+  if (/^https?:\/\//i.test(fileUrl)) {
+    return fileUrl
+  }
+  return `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/v${version}/${fileUrl}`
+}
+
 function extractMacDmgInfo(info: UpdateInfo): { url: string; size: number | null } {
   const dmgFile = info.files?.find((file) => file.url.endsWith('.dmg'))
   if (dmgFile) {
-    return { url: dmgFile.url, size: dmgFile.size ?? null }
+    return { url: resolveMacDmgUrl(info.version, dmgFile.url), size: dmgFile.size ?? null }
   }
 
   const version = info.version
-  const fallbackUrl = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/v${version}/hookbuddy-${version}.dmg`
-  return { url: fallbackUrl, size: null }
+  return {
+    url: resolveMacDmgUrl(version, `hookbuddy-${version}.dmg`),
+    size: null
+  }
 }
 
 function getMacDmgLocalPath(version: string): string {
@@ -127,17 +136,29 @@ function downloadMacDmg(version: string, url: string): Promise<void> {
       }
 
       const fileStream = createWriteStream(localPath)
+      let settled = false
+
+      const fail = (error: Error): void => {
+        if (settled) return
+        settled = true
+        fileStream.destroy()
+        reject(error)
+      }
+
+      fileStream.on('finish', () => {
+        if (settled) return
+        settled = true
+        resolve()
+      })
+      fileStream.on('error', fail)
+
       response.on('data', (chunk) => {
         fileStream.write(chunk)
       })
       response.on('end', () => {
         fileStream.end()
-        resolve()
       })
-      response.on('error', (error) => {
-        fileStream.close()
-        reject(error)
-      })
+      response.on('error', fail)
     })
     request.on('error', reject)
     request.end()
