@@ -8,6 +8,13 @@
 
 ## [未发布]
 
+## [1.1.1] - 2026-07-21
+
+### Fixed
+
+- macOS 自动更新：修复点击「下载新版本」报 `net::ERR_CONNECTION_REFUSED`。`latest-mac.yml` 中 dmg 的 `url` 为相对路径，直接请求会连到 localhost 被拒；现拼接为 GitHub Release 完整下载地址。
+- macOS dmg 下载落盘时序：改为等待文件流 `finish` 后再完成，避免大小校验或打开 dmg 时读到未写完的文件。
+
 ## [1.1.0] - 2026-07-21
 
 ### Added
@@ -55,7 +62,8 @@
 
 - 构建 macOS universal 包时排除构建期 Tailwind 原生依赖，避免合并失败。
 
-[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.1.0...HEAD
+[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.5...v1.1.0
 [1.0.5]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.3...v1.0.4
