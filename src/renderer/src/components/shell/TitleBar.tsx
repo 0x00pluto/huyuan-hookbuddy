@@ -1,17 +1,24 @@
 import { ChevronLeft, ChevronRight, LayoutPanelLeft, PanelLeft, PanelLeftClose } from 'lucide-react'
 import { toast } from 'sonner'
 
+import { UpdateEntry } from '@/components/shell/UpdateEntry'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { FEATURE_WIP_TOAST } from '@/lib/shell-types'
+import type { UpdaterStatusPayload } from '../../../../shared/updater-types'
 import { cn } from '@/lib/utils'
 
 interface TitleBarProps {
   sidebarOpen: boolean
   onToggleSidebar: () => void
+  updateStatus: UpdaterStatusPayload
 }
 
-export function TitleBar({ sidebarOpen, onToggleSidebar }: TitleBarProps): React.JSX.Element {
+export function TitleBar({
+  sidebarOpen,
+  onToggleSidebar,
+  updateStatus
+}: TitleBarProps): React.JSX.Element {
   const isMac = window.electron?.process?.platform === 'darwin'
 
   return (
@@ -64,7 +71,8 @@ export function TitleBar({ sidebarOpen, onToggleSidebar }: TitleBarProps): React
 
       <div className="flex-1" />
 
-      <div className="[-webkit-app-region:no-drag]">
+      <div className="flex items-center gap-1 [-webkit-app-region:no-drag]">
+        {!sidebarOpen && <UpdateEntry updateStatus={updateStatus} variant="titlebar" />}
         <Button
           type="button"
           variant="ghost"

@@ -7,6 +7,7 @@ import { EmptyState } from '@/components/shell/EmptyState'
 import { Sidebar } from '@/components/shell/Sidebar'
 import { TitleBar } from '@/components/shell/TitleBar'
 import { DEFAULT_PROJECT_ID, MOCK_PROJECTS } from '@/data/mock-projects'
+import { useUpdateStatus } from '@/hooks/useUpdateStatus'
 import { AI_PLACEHOLDER_REPLY, FEATURE_WIP_TOAST } from '@/lib/shell-types'
 import type { ChatMessage, MainView, NavId } from '@/lib/shell-types'
 
@@ -15,6 +16,7 @@ function createMessageId(): string {
 }
 
 export function MainShell(): React.JSX.Element {
+  const { updateStatus } = useUpdateStatus()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeNav, setActiveNav] = useState<NavId>('new-task')
   const [currentProjectId, setCurrentProjectId] = useState(DEFAULT_PROJECT_ID)
@@ -100,7 +102,11 @@ export function MainShell(): React.JSX.Element {
 
   return (
     <div className="flex h-svh flex-col overflow-hidden bg-background text-foreground">
-      <TitleBar sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen((open) => !open)} />
+      <TitleBar
+        sidebarOpen={sidebarOpen}
+        onToggleSidebar={() => setSidebarOpen((open) => !open)}
+        updateStatus={updateStatus}
+      />
 
       <div className="flex min-h-0 flex-1">
         {sidebarOpen && (
@@ -116,6 +122,7 @@ export function MainShell(): React.JSX.Element {
             onShowMore={handleShowMore}
             onSelectTask={handleSelectTask}
             onSettingsClick={() => toast.info(FEATURE_WIP_TOAST)}
+            updateStatus={updateStatus}
           />
         )}
 

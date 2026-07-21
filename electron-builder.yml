@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.huyuan.hybuddy
 productName: hookbuddy
 directories:
   buildResources: build

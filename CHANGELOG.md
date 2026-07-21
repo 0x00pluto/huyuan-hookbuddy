@@ -8,15 +8,19 @@
 
 ## [未发布]
 
-### Changed
-
-- CI 构建触发条件由推送 `main` 改为推送 `v*` 标签（保留手动运行）。
-- 发版流程改为 `pnpm version` 同步 `package.json` 与 git tag；CI 增加 tag 与版本一致性校验。
+## [1.0.4] - 2026-07-21
 
 ### Added
 
-- CI 新增 `release` job：`v*` 标签构建完成后自动创建 GitHub Release 并上传各平台安装包为 Assets。
-- 接入 electron-updater 自动更新：更新源为 GitHub Releases，启动时后台检查并下载新版本（macOS 需签名后生效）。
+- 应用内自动更新 R0（`prd-00002`）：Main 更新状态机 + Preload IPC + 侧栏/标题栏 Ready 箭头与确认框。
+- Windows：静默下载安装包，确认后重启安装；稍后路径在正常退出时自动安装。
+- macOS 降级：检测新版本后下载 `.dmg` 并自动打开，由用户手动拖入 Applications（未签名期间不走静默安装）。
+
+### Changed
+
+- `appId` 由 `com.electron.app` 改为 `com.huyuan.hybuddy`（自首个正式发布起固定）。
+- 自动更新 UX 由系统通知改为应用内箭头入口；关闭 `checkForUpdatesAndNotify` 系统通知。
+- 无可用更新时侧栏不显示更新占位圆圈。
 
 ## [1.0.0] - 2026-07-21
 
@@ -30,5 +34,6 @@
 
 - 构建 macOS universal 包时排除构建期 Tailwind 原生依赖，避免合并失败。
 
-[未发布]: https://example.com/compare/v1.0.0...HEAD
-[1.0.0]: https://example.com/releases/tag/v1.0.0
+[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.3...v1.0.4
+[1.0.0]: https://github.com/0x00pluto/huyuan-hookbuddy/releases/tag/v1.0.0

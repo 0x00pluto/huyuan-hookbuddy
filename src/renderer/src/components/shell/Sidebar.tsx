@@ -12,12 +12,14 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { ProjectList } from '@/components/shell/ProjectList'
+import { UpdateEntry } from '@/components/shell/UpdateEntry'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { MOCK_STANDALONE_TASKS } from '@/data/mock-projects'
 import { FEATURE_WIP_TOAST } from '@/lib/shell-types'
 import type { MockProject, NavId } from '@/lib/shell-types'
+import type { UpdaterStatusPayload } from '../../../../shared/updater-types'
 import { cn } from '@/lib/utils'
 
 interface SidebarProps {
@@ -32,6 +34,7 @@ interface SidebarProps {
   onShowMore: (projectId: string) => void
   onSelectTask: (projectId: string, taskId: string) => void
   onSettingsClick: () => void
+  updateStatus: UpdaterStatusPayload
 }
 
 const NAV_ITEMS: { id: NavId; label: string; icon: typeof SquarePen }[] = [
@@ -52,7 +55,8 @@ export function Sidebar({
   onToggleExpand,
   onShowMore,
   onSelectTask,
-  onSettingsClick
+  onSettingsClick,
+  updateStatus
 }: SidebarProps): React.JSX.Element {
   const [tasksOpen, setTasksOpen] = useState(true)
 
@@ -153,11 +157,7 @@ export function Sidebar({
           <Settings className="size-4" />
           设置
         </Button>
-        <span
-          className="size-7 rounded-full bg-sidebar-primary/20 ring-1 ring-sidebar-border"
-          aria-hidden
-          title="头像占位"
-        />
+        <UpdateEntry updateStatus={updateStatus} variant="sidebar" />
       </div>
     </aside>
   )

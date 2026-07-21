@@ -2,8 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { exec } from 'child_process'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { autoUpdater } from 'electron-updater'
 import icon from '../../resources/icon.png?asset'
+import { initUpdater } from './updater'
 
 function createWindow(): void {
   // Create the browser window.
@@ -50,7 +50,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.huyuan.hybuddy')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -69,13 +69,7 @@ app.whenReady().then(() => {
   })
 
   createWindow()
-
-  // 自动更新：从 GitHub Releases 检查新版本，下载完成后系统通知，退出时安装
-  if (!is.dev) {
-    autoUpdater.checkForUpdatesAndNotify().catch((err) => {
-      console.error('检查更新失败:', err)
-    })
-  }
+  initUpdater()
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
