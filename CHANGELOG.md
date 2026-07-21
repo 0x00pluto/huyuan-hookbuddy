@@ -8,6 +8,12 @@
 
 ## [未发布]
 
+## [1.0.5] - 2026-07-21
+
+### Changed
+
+- 补丁发版，用于验证应用内自动更新（相对 1.0.4 无功能变更）。
+
 ## [1.0.4] - 2026-07-21
 
 ### Added
@@ -34,6 +40,7 @@
 
 - 构建 macOS universal 包时排除构建期 Tailwind 原生依赖，避免合并失败。
 
-[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.4...HEAD
+[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.3...v1.0.4
 [1.0.0]: https://github.com/0x00pluto/huyuan-hookbuddy/releases/tag/v1.0.0
