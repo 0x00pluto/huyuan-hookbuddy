@@ -16,6 +16,7 @@
 ### Added
 
 - CI 新增 `release` job：`v*` 标签构建完成后自动创建 GitHub Release 并上传各平台安装包为 Assets。
+- 接入 electron-updater 自动更新：更新源为 GitHub Releases，启动时后台检查并下载新版本（macOS 需签名后生效）。
 
 ## [1.0.0] - 2026-07-21
 
