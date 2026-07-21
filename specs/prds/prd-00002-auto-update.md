@@ -2,15 +2,19 @@
 name: prd-00002-auto-update
 sequence: 2
 description: HookBuddy 应用内自动更新：Windows 静默下载 + 确认重启安装；macOS 无签名密钥期间降级为点箭头下载 dmg 并自动打开手动安装。
-status: in-progress
+status: partial
 created: 2026-07-21T07:57:32Z
+last_accepted_at: 2026-07-21T09:00:49Z
+accepted_commit: 951f86a
+accepted_branch: main
+accepted_scope: R0,R1
 ---
 
 # PRD: HookBuddy 应用内自动更新
 
 | 属性 | 值 |
 |------|-----|
-| 状态 | 工程：backlog |
+| 状态 | 工程：partial（见文末「工程验收状态」） |
 | 范围 | Main 更新编排 + Preload IPC + Renderer 左下角入口与确认框；Windows 完整自动更新；macOS 降级（下载 dmg 手动安装）；App ID 固定为 `com.huyuan.hybuddy` |
 | 关联文档 | `AGENTS.md`、`docs/build-and-release.md`、`docs/doc_index.md`、`electron-builder.yml`、`.github/workflows/build-all-platforms.yml` |
 | 关联 PRD | `specs/prds/prd-00001-main-shell-ui.md`（侧栏左下角「设置」旁绿色圆圈占位） |
@@ -457,3 +461,67 @@ stateDiagram-v2
 |------|------|
 | 2026-07-21 | 初稿：基于头脑风暴与已拍板决策落盘（Win+mac、静默下载、左下角箭头、确认重启、稍后退出安装、任务阻断、稳定版、失败静默重试） |
 | 2026-07-21 | 修订：`appId` 拍板改为 `com.huyuan.hybuddy` 并随首个正式发布固定；因 mac 签名密钥不可得，macOS 降级为「检测亮箭头 → 确认下载 dmg → 自动打开 → 手动拖入」，签名/公证转开放项 O4，切回静默更新列入 R1 |
+
+## 15. 工程验收状态
+
+> 由 `/team:prd-accept` 维护；勿手工编造「通过」。最后更新：2026-07-21T09:00:49Z，main@951f86a，范围：R0,R1。
+
+### 总览
+
+| 项 | 值 |
+|----|-----|
+| 工程状态 | `partial` |
+| 验收判定 | 部分通过 |
+| 最近验收 | 2026-07-21T09:00:49Z |
+| 代码提交 | `951f86a`（`v1.0.4`） |
+| 摘要 | R0 代码路径已合入：Main 状态机、Preload IPC、侧栏/标题栏 Ready 入口、分平台确认框、`appId=com.huyuan.hybuddy`、文档已同步；dev 态 UI 验过「无更新不显示入口」。Win/mac 生产包端到端升级演示与 R1（mac 静默切回等）未完成。 |
+
+### Release 交付
+
+| Release | 状态 | 说明 |
+|---------|------|------|
+| R0 | 部分 | 实现与类型检查齐备；打包态端到端升级路径待人工/CI 产物复验 |
+| R1 | 未实现 / 部分范围外 | 依赖 O4 的 mac 静默切回未做；设置页检查更新按 O7 本期不做；系统通知已在 R0 关闭 |
+
+### 功能验收清单（Agent 优先读此表）
+
+| ID | 能力摘要 | Release | 状态 | 证据 |
+|----|----------|---------|------|------|
+| F01 | Main updater 状态机 + 启动/6h 检查 + `allowPrerelease=false` + 平台分派 | R0 | 通过 | `src/main/updater.ts`（`CHECK_INTERVAL_MS`、`allowPrerelease=false`、`autoDownload=isWin`、`initUpdater`）；`src/main/index.ts:72` |
+| F02 | Windows：静默下载 + 确认框立即/稍后 + `quitAndInstall(..., true)` + `autoInstallOnAppQuit` | R0 | 部分 | 代码：`updater.ts` `installWinUpdate` / `autoDownload` / `autoInstallOnAppQuit`；`UpdateEntry.tsx` win 文案。**缺**：旧客户端→新 Release 实机演示 |
+| F03 | Windows：运行中任务阻断立即安装（stub 可测） | R0 | 通过 | `hasRunningTask()` stub + `tasks:has-running`；Main/`UpdateEntry` 双侧校验 |
+| F04 | macOS 降级：检测即 Ready + 确认下载 dmg + `shell.openPath` + 同版本不重复下载 | R0 | 部分 | `installMacUpdate` / `isMacDmgReady` / `app.getPath('downloads')`；确认框含拖入 Applications。**缺**：打包态端到端演示 |
+| F05 | Preload 类型化 IPC（get/on/retry/install/hasRunningTask） | R0 | 通过 | `src/preload/index.ts` + `index.d.ts` 与 Main handlers 一致 |
+| F06 | Sidebar Ready 箭头 + 分平台 tooltip/确认文案；非 Ready 不占位 | R0 | 通过 | `UpdateEntry.tsx` `if (!isReady) return null`；`Sidebar.tsx`；dev UI CDP：无箭头/无占位圆圈 |
+| F07 | 侧栏折叠时标题栏 Ready 入口（O2） | R0 | 通过 | `TitleBar.tsx` `{!sidebarOpen && <UpdateEntry variant="titlebar" />}` |
+| F08 | 失败首次静默重试 + 连续失败 toast「重试」 | R0 | 通过 | `scheduleSilentRetry`；`useUpdateStatus.ts` sonner action |
+| F09 | `appId` / AppUserModelId = `com.huyuan.hybuddy` | R0 | 通过 | `electron-builder.yml:1`；`src/main/index.ts:53` |
+| F10 | 文档：应用内入口、mac 降级、Gatekeeper、系统通知关闭 | R0 | 通过 | `docs/build-and-release.md`「自动更新」节 |
+| F11 | 关闭系统通知（O3），改用 `checkForUpdates` | R0 | 通过 | 无 `checkForUpdatesAndNotify`；文档注明已关闭 |
+| F12 | `pnpm typecheck`；dts 与暴露 API 一致 | R0 | 通过 | typecheck exit 0（验收时） |
+| F13 | Win/mac 生产主路径可演示走通（成功标准 1–2、5、10） | R0 | 部分 | 已发 `v1.0.4` tag；**缺**旧版客户端实机走通与 Release 资产人工确认（本环境 `gh` 未登录） |
+| F14 | macOS 切回静默自动更新（去 dmg 降级） | R1 | 未实现 | 依赖开放项 O4（证书/公证未就绪） |
+| F15 | 侧栏折叠 Ready 入口视觉打磨 | R1 | 未实现 | R0 已有最小可用标题栏入口；打磨未做 |
+| F16 | 设置页「检查更新」与当前版本 | R1 | 范围外 | O7：本期不实现设置页更新项 |
+| F17 | 更细错误分类文案 | R1 | 未实现 | 仅通用 errorMessage + toast |
+| F18 | R1「弱化/关闭系统通知」 | R1 | 通过 | 已在 R0 关闭系统通知，统一应用内入口 |
+
+### 未完成与遗留
+
+1. **生产端到端**：用旧版安装包对 `v1.0.4+` 正式 Release，复验 Win 静默下载→重启、mac 下载 dmg→打开→拖入。
+2. **R1 / O4**：Apple 签名与公证就绪后切回 mac 静默自动更新并移除 dmg 降级。
+3. **R1**：设置页检查更新、错误分类文案、折叠入口视觉打磨（可选）。
+4. 开放项 O1 stub 在 Agent 任务落地后需接真实运行中任务信号。
+
+### 质量检查
+
+| 检查项 | 状态 |
+|--------|------|
+| 自动化测试（本项目无） | 跳过 |
+| pnpm typecheck | 通过（验收时） |
+| pnpm lint（相关文件） | 通过（无新增 error；全仓历史 lint 债不计入本 PRD） |
+| 文档与发布说明同步 | 通过（`docs/build-and-release.md`、`CHANGELOG` 1.0.4） |
+| OpenAPI | 不适用（无 REST API） |
+
+---
+统计：通过 11 / 部分 3 / 未实现 3 / 范围外 1
