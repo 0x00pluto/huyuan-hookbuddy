@@ -8,6 +8,12 @@
 
 ## [未发布]
 
+## [1.1.2] - 2026-07-21
+
+### Fixed
+
+- Windows 首次安装及自动更新完成后改为直接启动安装目录中的 exe，修复部分系统上经开始菜单 `.lnk` 自启报「该文件没有与之关联的应用」。
+
 ## [1.1.1] - 2026-07-21
 
 ### Fixed
@@ -62,7 +68,8 @@
 
 - 构建 macOS universal 包时排除构建期 Tailwind 原生依赖，避免合并失败。
 
-[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.1.1...HEAD
+[未发布]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.5...v1.1.0
 [1.0.5]: https://github.com/0x00pluto/huyuan-hookbuddy/compare/v1.0.4...v1.0.5
